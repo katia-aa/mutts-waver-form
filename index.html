@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mutts in the 6ix Waiver</title>
+</head>
+<body>
+  <!-- Waiver Form -->
+  <div id="waiver-form"
+    style="background-color: #f9f9f9; padding: 30px; border-radius: 8px; border: 1px solid #ddd; max-width: 700px; margin: 20px auto; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif;">
+    <h1 style="text-align: center; color: black; margin: 20px auto;">Mutts in the 6ix Waiver</h1>
+    <p><strong>RELEASE OF LIABILITY, WAIVER OF CLAIMS, ASSUMPTION OF RISKS, AND INDEMNITY AGREEMENT</strong></p>
+    <p>By agreeing to the terms of this document, you will waive or give up certain legal rights, including the right to sue for negligence or claim compensation following an accident or incident.</p>
+
+    <!-- Other waiver text here... -->
+
+    <form class="form-container" onsubmit="myFunction(event)">
+      <label for="dogName" style="display: block; margin-bottom: 10px; font-weight: bold; color: #555;">My Dog's Name:</label>
+      <input type="text" id="dogName" name="dogName" required
+        style="box-sizing: border-box; width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 4px; border: 1px solid #ccc;">
+
+      <label for="fullName" style="display: block; margin-bottom: 10px; font-weight: bold; color: #555;">Full Name:</label>
+      <input type="text" id="fullName" name="fullName" required
+        style="box-sizing: border-box; width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 4px; border: 1px solid #ccc;">
+
+      <label for="date" style="display: block; margin-bottom: 10px; font-weight: bold; color: #555;">Date:</label>
+      <input type="date" id="date" name="date" required
+        style="box-sizing: border-box; width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 4px; border: 1px solid #ccc;">
+
+      <label for="signature" style="display: block; margin-bottom: 10px; font-weight: bold; color: #555;">Signature:</label>
+      <div id="preact-signature-pad-root" class="signature-pad"></div>
+      <input type="hidden" name="signature" id="signature-field">
+
+      <button type="submit" class="form-submit-button"
+        style="box-sizing: border-box; width: 100%; background-color: rgb(132, 132, 194); color: white; padding: 14px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 1rem;">Submit</button>
+
+      <div id="form-message" style="margin-top: 20px; font-size: 48px;"></div>
+    </form>
+  </div>
+
+  <script>
+    // Set today's date as the default value
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('date').value = today;
+
+    function displayMessage(type, message) {
+      const formMessage = document.getElementById('form-message');
+      formMessage.style.color = type === 'success' ? 'green' : '#f48fa8';
+      formMessage.textContent = message;
+    }
+
+    function myFunction(event) {
+      event.preventDefault();
+      const formSubmitButton = document.querySelector('.form-submit-button');
+      displayMessage('info', 'Submitting form...');
+      formSubmitButton.disabled = true;
+
+      const formData = new FormData();
+      formData.append('dogName', document.getElementById('dogName').value);
+      formData.append('fullName', document.getElementById('fullName').value);
+      formData.append('date', document.getElementById('date').value);
+      formData.append('signature', document.getElementById('signature-field').value);
+
+      fetch('https://script.google.com/macros/s/AKfycbysgJrG8vV7n08kgzT1FTAYMzf3O7lflJDsX492qAwCTMA47BTk6YLvjN-AUr8swweRZw/exec', {
+        method: 'POST',
+        mode: 'no-cors',
+        body: formData
+      })
+      .then(() => {
+        displayMessage('success', 'Form submitted successfully!');
+        document.querySelector('form').reset();
+        document.getElementById('date').value = today;
+        formSubmitButton.disabled = false;
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        displayMessage('error', `Error submitting the form: ${error.message}`);
+        formSubmitButton.disabled = false;
+      });
+    }
+  </script>
+</body>
+</html>
